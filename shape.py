@@ -79,12 +79,11 @@ def Chromosome(select):
 
     for i in range(100):
         base = chromosome[i].draw(base)
-
-    base.show()
+    return base
 
 
 def main():
-    Chromosome(2)
+    chromosome = Chromosome(2)
 
 if __name__ == '__main__':
     main()
