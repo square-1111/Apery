@@ -28,6 +28,12 @@ class Shape(object):
         global color
         color = (self.red, self.green, self.blue, self.alpha)
 
+    def remake(self):
+        x,y,z = random.sample(range(-50,50),3)
+        self.red = self.red + x
+        self.blue = self.blue + y
+        self.green = self.green + z
+        self.alpha = random.randint(0,255)
 
 class Circle(Shape):
 
@@ -39,6 +45,9 @@ class Circle(Shape):
         drw.ellipse(coordinate, color, None)
         return base
 
+    def remake(self):
+        super().remake()
+
 class Rectangle(Shape):
 
     def __init__(self):
@@ -49,6 +58,9 @@ class Rectangle(Shape):
         super().draw(base)
         drw.rectangle(coordinate, color, None)
         return base
+
+    def remake(self):
+        super().remake()
 
 
 class Triangle(Shape):
@@ -64,26 +76,7 @@ class Triangle(Shape):
         drw.polygon(coordinate, color, None)
         return base
 
+    def remake(self):
+        super().remake()
 
 primitive = [Circle(), Rectangle(), Triangle()]
-
-def Chromosome(select):
-    base = Image.new('RGB',(350,350), (255,255,255))
-    chromosome = []
-    temp = primitive[select]
-    instanceOf = temp.__class__
-
-    for i in range(100):
-        temp = instanceOf()
-        chromosome.append(temp)
-
-    for i in range(100):
-        base = chromosome[i].draw(base)
-    return base
-
-
-def main():
-    chromosome = Chromosome(2)
-
-if __name__ == '__main__':
-    main()
