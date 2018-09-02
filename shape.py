@@ -1,26 +1,28 @@
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 import numpy as np
 import random
 
-class Shape(object):
-    # def __new__(cls, *args, **kwargs):
-    #             #print "Creating Instance"
-    #     instance = super()(Circle, cls).__new__(cls, *args, **kwargs)
-    #     return instance
+COLOR_RANGE = 255
 
+class Parameters:
+
+    @classmethod
+    def set(cls, image_size):
+        X_Range = image_size[0]
+        Y_Range = image_size[1]
+        X_Shift = X_Range/10
+        Y_Shift = Y_Range/10
+
+class Shape(object):
 
     def __init__(self):
-        self.red = random.randint(0,255)
-        self.blue = random.randint(0,255)
-        self.green = random.randint(0,255)
-        self.alpha = random.randint(0,255)
-        self.x1 = random.randint(0,400)
-        self.y1 = random.randint(0,400)
-        self.x2 = random.randint(0,400)
-        self.y2 = random.randint(0,400)
+        
+        self.x1 = random.randint(0,Parameters.X_Range)
+        self.y1 = random.randint(0,Parameters.Y_Range)
+        self.x2 = random.randint(0,Parameters.X_Range)
+        self.y2 = random.randint(0,Parameters.Y_Range)
 
     def draw(self, base):
-        #canvas of size 350 * 350
         global drw
         drw = ImageDraw.Draw(base,'RGBA')
         global coordinate
@@ -29,11 +31,10 @@ class Shape(object):
         color = (self.red, self.green, self.blue, self.alpha)
 
     def remake(self):
-        x,y,z = random.sample(range(-50,50),3)
-        self.red = self.red + x
-        self.blue = self.blue + y
-        self.green = self.green + z
-        self.alpha = random.randint(0,255)
+        self.x1 = self.x1 + random.randint(-1*Parameters.X_Shift,Parameters.X_Shift)
+        self.x2 = self.x2 + random.randint(-1*Parameters.X_Shift,Parameters.X_Shift)
+        self.y1 = self.y1 + random.randint(-1*Parameters.Y_Shift,Parameters.Y_Shift)
+        self.y2 = self.y2 + random.randint(-1*Parameters.Y_Shift,Parameters.Y_Shift)
 
 class Circle(Shape):
 
@@ -54,7 +55,6 @@ class Rectangle(Shape):
         super().__init__()
 
     def draw(self, base):
-        #canvas of size 350 * 350
         super().draw(base)
         drw.rectangle(coordinate, color, None)
         return base
@@ -67,8 +67,8 @@ class Triangle(Shape):
 
     def __init__(self):
         super().__init__()
-        self.x3 = random.randint(0,400)
-        self.y3 = random.randint(0,400)
+        self.x3 = random.randint(0,Parameters.X_Range)
+        self.y3 = random.randint(0,Parameters.Y_Range)
 
     def draw(self, base):
         super().draw(base)
@@ -78,5 +78,8 @@ class Triangle(Shape):
 
     def remake(self):
         super().remake()
+        self.x3 = self.x3 + random.randint(-1*Parameters.X_Shift,Parameters.X_Shift)
+        self.y3 = self.y3 + random.randint(-1*Parameters.Y_Shift,Parameters.Y_Shift)
+
 
 primitive = [Circle(), Rectangle(), Triangle()]
