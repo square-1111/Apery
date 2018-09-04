@@ -1,5 +1,6 @@
 import sys
 from skimage import color,io, data
+from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 from scipy import ndimage
 import random
@@ -64,15 +65,42 @@ def delaunayTriangle(n):
     #Step 4.2: Color the base
 
     #Step 4.2.1: mapping the color
-    color = []
-    for point in selectedPoints:
-        color.append(rgb_img[point[0]][point[1]])
-
+    
+    polygons  = []
     voronoi_plot_2d(vor)
+    flag=1
+    print(len(vor.vertices))
+    for region in vor.regions:
+        polygon = []
+        if -1 not in region:
+            for i in region:
+                temp = vor.vertices[i]
+                temp = np.array(temp)
+                polygon.append(temp.astype(int))
+            polygons.append(polygon)
+    # polygons = np.array(polygons)
+    # polygons = polygons.astype(int)
+    base = Image.new('RGB',(350,350), (0,0,0))
+    global drw
+    drw = ImageDraw.Draw(base,'RGB')
+    for coordinate in polygons:
+    	if coordinate:
+            y = coordinate[0][0]%350
+            x = coordinate[0][1]%350
+            global color
+            coord = []
+            for i  in range(len(coordinate)):
+            	coord.append(tuple(coordinate[i]))
+            color = rgb_img[x][y]
+
+            color = np.append(color, [1])
+            color =tuple(color)
+            drw.polygon(coord, color, None)
+    base.show()
     plt.show()
 
 def main():
-    delaunayTriangle(100)
+    delaunayTriangle(500)
 
 if __name__ == '__main__':
     main()
