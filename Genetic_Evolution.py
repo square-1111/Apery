@@ -126,4 +126,3 @@ def getFeatures(n,allPoint):
 population = Population(100)
 population.calculate_fitness()
 
-
