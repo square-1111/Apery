@@ -15,40 +15,37 @@ class Individual:
 
     def __init__(self, n, allPoint):
         self.fitness = 0
-        self.delaunayTriangle(n, allPoint)
-        self.length = len(self.genes)
+        self.create(n, allPoint)
+        self.length = len(self.polygons)
 
     def calc_fitness(self):
         #draw image on canvas
         base = Image.new('RGB',(350,350), (0,0,0))
         global drw
         drw = ImageDraw.Draw(base,'RGB')
-        for coordinate in self.genes:
-            if coordinate:
-                y = coordinate[0][0]%350
-                x = coordinate[0][1]%350
-                global color
+        x = 0
+        for polygon in self.polygons:
+            if polygon:
                 coord = []
-                for i  in range(len(coordinate)):
-                    coord.append(tuple(coordinate[i]))
-                color = rgb_img[x][y]
-                color = np.append(color, [1])
-                color =tuple(color)
+                for i  in range(len(polygon)):
+                    coord.append(tuple(polygon[i]))
+                color =tuple(self.colors[x])
                 drw.polygon(coord, color, None)
+            x+=1
         base.save('base.jpg')
         
         #calculate fitness
         base_arr = np.array(base)
         self.fitness = -1*np.linalg.norm(rgb_img-base_arr)
 
-    def delaunayTriangle(self,n, allPoint):
+    def create(self,n, allPoint):
         #Step1: Create vornoi diagram
         selectedPoints = getFeatures(n,allPoint)
         vor = Voronoi(selectedPoints)
 
         #extract voronoi polygons
-        polygons  = []
-        flag=1
+        self.polygons  = []
+        flag = 1
         for region in vor.regions:
             polygon = []
             if -1 not in region:
@@ -56,8 +53,20 @@ class Individual:
                     temp = vor.vertices[i]
                     temp = np.array(temp)
                     polygon.append(temp.astype(int))
-                polygons.append(polygon)
-        self.genes = polygons
+                self.polygons.append(polygon)
+
+        self.colors = []
+        for polygon in self.polygons:
+            if polygon:
+                y = polygon[0][0]%350
+                x = polygon[0][1]%350
+                global color
+                color = rgb_img[x][y]
+                color = np.append(color, [1])
+                self.colors.append(color)
+
+            else:
+                self.colors.append([])
 
 class Population:
 
