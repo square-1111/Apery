@@ -11,11 +11,11 @@ import matplotlib.pyplot as plt
 
 #Step 1 :Reading image
 rgb_img = io.imread(sys.argv[1])
-print(rgb_img[0][0])
+length = rgb_img.shape[0]
+breadth = rgb_img.shape[1]
 
-print("shape {}".format(rgb_img.shape))
 
-def imagePreProcessing():
+def getAllFeaturePoints():
     #Step 1.1: color conversion rgb to colorlab
     # lab = color.rgb2lab(img)
     # print(lab.shape)
@@ -39,7 +39,7 @@ def imagePreProcessing():
 def getFeatures(n):
     # n - number of points to select
     #Step3: Fetch points from convolved image for sampling
-    allPoint = imagePreProcessing()
+    allPoint = getAllFeaturePoints()
 
     # using Poisson Process to select random points
 
@@ -55,21 +55,20 @@ def getFeatures(n):
 
     return selectedPoints
 
-def delaunayTriangle(n):
+def vornoiWireFrame(n):
     #Step4: Create vornoi diagram
 
     #Step 4.1: Form the base
     selectedPoints = np.array(getFeatures(n))
     vor = Voronoi(selectedPoints)
+    return vor
 
+def drawVornoi(vor):
     #Step 4.2: Color the base
 
-    #Step 4.2.1: mapping the color
-    
     polygons  = []
-    voronoi_plot_2d(vor)
     flag=1
-    print(len(vor.vertices))
+
     for region in vor.regions:
         polygon = []
         if -1 not in region:
@@ -78,15 +77,14 @@ def delaunayTriangle(n):
                 temp = np.array(temp)
                 polygon.append(temp.astype(int))
             polygons.append(polygon)
-    # polygons = np.array(polygons)
-    # polygons = polygons.astype(int)
-    base = Image.new('RGB',(350,350), (0,0,0))
+
+    base = Image.new('RGB',(breadth,length), (0,0,0))
     global drw
     drw = ImageDraw.Draw(base,'RGB')
     for coordinate in polygons:
     	if coordinate:
-            y = coordinate[0][0]%350
-            x = coordinate[0][1]%350
+            x = coordinate[0][1]%length
+            y = coordinate[0][0]%breadth
             global color
             coord = []
             for i  in range(len(coordinate)):
@@ -96,11 +94,15 @@ def delaunayTriangle(n):
             color = np.append(color, [1])
             color =tuple(color)
             drw.polygon(coord, color, None)
+    # base = base.rotate(-90)
+    base.save("base.jpg")
     base.show()
-    plt.show()
+    
+    return np.array(base)
+
 
 def main():
-    delaunayTriangle(500)
+    drawVornoi(vornoiWireFrame  (2000))
 
 if __name__ == '__main__':
     main()

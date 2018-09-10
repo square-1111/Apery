@@ -1,7 +1,6 @@
 import numpy as np
-from scipy.spatial import distance
 
-def fitness(original, reproduced):
-    original = np.array(original)
-    reproduced = np.array(reproduced)
-    return distance.euclidean(original, reproduced)
+#comparing original image with newly rendered image
+#Using L2 norm
+def calFitness(original, reproduced):
+    return np.linalg.norm(original-reproduced)
