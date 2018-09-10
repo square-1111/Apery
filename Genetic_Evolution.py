@@ -44,6 +44,9 @@ class Individual:
         vor = Voronoi(selectedPoints)
 
         #extract voronoi polygons
+
+        #self.polygons is a list of all polygons. Each polygon is a list of its vertices
+        self.polygons  = []
         self.polygons  = []
         flag = 1
         for region in vor.regions:
@@ -55,6 +58,8 @@ class Individual:
                     polygon.append(temp.astype(int))
                 self.polygons.append(polygon)
 
+
+        #self.colors holds the colors of corresponding polygons in self.polygons list        
         self.colors = []
         for polygon in self.polygons:
             if polygon:
@@ -78,7 +83,11 @@ class Population:
     def calculate_fitness(self):
         for i in range(self.pop_size):
             self.individuals[i].calc_fitness()
+
+        #sort individuals on the basis of fitness
         self.individuals.sort(key = lambda x:x.fitness)
+
+        #store the maximum fitness
         self.max_fitness = self.individuals[self.pop_size-1].fitness
 
     '''def selection(self):
