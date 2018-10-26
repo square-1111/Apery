@@ -11,7 +11,7 @@ function setup(){
     
     ellipseMode(RADIUS);
     
-    img =  loadImage('vasu.jpeg');
+    img =  loadImage('hoovertowernight.jpg');
 
     
     
@@ -21,6 +21,7 @@ var maxSize = 80;
 var minSize = 5;
 
 function draw(){
+    frameRate(200);
     
     img_w = img.width;
     img_h = img.height;
