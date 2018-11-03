@@ -22,9 +22,7 @@ class Individual:
         vornoi_image = np.array(vornoi_image)
 
         #calculate fitness
-        self.fitness = fit.calFitness(orignal_rgb, vornoi_image)
-
-
+        self.fitness = fit.calFitness(orignal_rgb, vornoi_image)s
 
 class Population:
 
@@ -37,7 +35,11 @@ class Population:
     def calculate_fitness(self):
         for i in range(self.pop_size):
             self.individuals[i].calc_fitness()
+
+        #sort individuals on the basis of fitness
         self.individuals.sort(key = lambda x:x.fitness)
+
+        #store the maximum fitness
         self.max_fitness = self.individuals[self.pop_size-1].fitness
 
 
