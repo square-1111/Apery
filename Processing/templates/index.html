@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = utf-8>
+            <title>Image Comic</title>
+            <link rel="stylesheet" href="../static/style.css">
+            <script type=text/javascript src="{{url_for('static', filename='p5.min.js') }}"></script>
+            <script type=text/javascript src="{{url_for('static', filename='hillClimb.js') }}"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    </head>
+    <body>
+    <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+    <strong>Files:</strong><br>
+    <input id="file-picker" type="file" name="file" accept="image/*" multiple>
+    <div id="msg"></div>
+    <input type="submit" value="Upload!" id="upload-button">
+    </form>
+    <button type="button" onclick="loadellipse()">Ellipse</button>
+    <button type="button" onclick="loadtriangle()">Triangle</button>
+    <button type="button" onclick="loadrect()">Rectangle</button>
+    <button type="button" onclick="loadline()">Line</button>
+    </body>
+ <!--    
+    <script>
+    $("#file-picker").change(function(){
+        var input = document.getElementById('file-picker');
+        for (var i=0; i<input.files.length; i++)
+        {
+        //koala.jpg, koala.JPG substring(index) lastIndexOf('a') koala.1.jpg
+            var ext= input.files[i].name.substring(input.files[i].name.lastIndexOf('.')+1).toLowerCase()
+            if ((ext == 'jpg') || (ext == 'png'))
+            {
+                $("#msg").text("Files are supported")
+            }
+            else
+            {
+                $("#msg").text("Files are NOT supported")
+                document.getElementById("file-picker").value ="";
+            }
+        }
+    } );
+</script> -->
+</html>

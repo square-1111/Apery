@@ -1,39 +1,58 @@
 var height, width
 var img_h, img_w;
 var img;
+var flag = 0;
 
-function preload(){
-    img = loadImage('starry_night.jpg');
+function loadellipse(){
+    console.log("tola");
+    flag = 1;
+}
+
+function loadrect(){
+    flag = 2;
+}
+
+function loadtriangle(){
+    flag = 3;
+}
+
+function loadline(){
+    flag = 4;
 }
 
 function setup(){
-
+    img = loadImage("./static/images/hoovertowernight.jpg"); 
     height = img.height;
     width = img.width;
     createCanvas(width,height);
     background(255);
     ellipseMode(RADIUS);
-    
 }
 
-var maxSize = 100;
+var maxSize = 80;
 var minSize = 2;
 var alp = 255;
 
 function draw(){
-     
+    
     img_w = img.width;
     img_h = img.height;
     if(maxSize!=minSize)
-        rendertriangle()
-        //renderellipse()
-        //renderrect()
+        if(flag==1)
+            renderellipse()
+        else if(flag==2)
+            renderrect()
+        else if(flag==3)
+            rendertriangle()
+        else if(flag==4)
+            renderline()
 
     if(frameCount%30 == 0){
         maxSize -= 2;
         maxSize = max(maxSize,minSize);
         alp--;
     }
+
 }
 
 function renderellipse(){
@@ -100,6 +119,26 @@ for(var i = 0 ; i < width/maxSize ; ++i ){
         noStroke();
         fill(color[0], color[1], color[2], alp%128 + 128);
         triangle(x1,y1,x2,y2,x3,y3);
+
+    }
+}
+
+function renderline(){
+for(var i = 0 ; i < width/maxSize ; ++i ){
+        
+        var x1 = floor(random(img_w));
+        var y1 = floor(random(img_h));
+
+        var side_length = random(2*maxSize);
+
+        var wi_off = random(-side_length,side_length);
+        var hi_off = random(-side_length,side_length);
+        var x2 = x1+wi_off
+        var y2 = y1+hi_off
+
+        var color = img.get((x1+x2)/2,(y1+y2)/2);
+        stroke(color);
+        line(x1,y1,x2,y2);
 
     }
 }
