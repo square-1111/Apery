@@ -20,8 +20,12 @@ function loadline(){
     flag = 4;
 }
 
+function preload(){
+img = loadImage("./static/images/a.jpg"); 
+}
+
 function setup(){
-    img = loadImage("./static/images/hoovertowernight.jpg"); 
+    
     height = img.height;
     width = img.width;
     createCanvas(width,height);
@@ -30,7 +34,7 @@ function setup(){
 }
 
 var maxSize = 80;
-var minSize = 2;
+var minSize = 0;
 var alp = 255;
 
 function draw(){
@@ -119,26 +123,6 @@ for(var i = 0 ; i < width/maxSize ; ++i ){
         noStroke();
         fill(color[0], color[1], color[2], alp%128 + 128);
         triangle(x1,y1,x2,y2,x3,y3);
-
-    }
-}
-
-function renderline(){
-for(var i = 0 ; i < width/maxSize ; ++i ){
-        
-        var x1 = floor(random(img_w));
-        var y1 = floor(random(img_h));
-
-        var side_length = random(2*maxSize);
-
-        var wi_off = random(-side_length,side_length);
-        var hi_off = random(-side_length,side_length);
-        var x2 = x1+wi_off
-        var y2 = y1+hi_off
-
-        var color = img.get((x1+x2)/2,(y1+y2)/2);
-        stroke(color);
-        line(x1,y1,x2,y2);
 
     }
 }
